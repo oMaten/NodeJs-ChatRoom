@@ -1,0 +1,182 @@
+//	Animate
+
+@mixin keyframes($name){
+	@keyframes #{$name} {
+		@content;
+	}
+}
+
+//	Element position in block
+
+@mixin center($width: null, $height: null){
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	@if not $width and not $height{
+		transform: translate(-50%, -50%);
+	}@else if $width and $height{
+		width: $width;
+		height: $height;
+		margin: -($width / 2) #{0 0} -($height / 2);
+	}@else if not $height{
+		width: $width;
+		margin-left: -($width / 2);
+		transform: translateY(-50%);
+	}@else{
+		height: $height;
+		margin-top: -($height / 2);
+		transform: translateX(-50%);
+	}
+}
+
+@mixin abs-position($top: auto, $right: auto, $bottom: auto, $left: auto){
+	position: absolute;
+	top: $top;
+	right: $right;
+	bottom: $bottom;
+	left: $left;
+}
+
+//	Font color, size, line-height and so on
+
+@function black($opacity){
+	@return rgba(0, 0, 0, $opacity);
+}
+
+@function white($opacity){
+	@return rgba(255, 255, 255, $opacity);
+}
+
+@function calculateRem($size){
+	$remSize: $size / 16px;
+	@return $remSize * 1rem;
+}
+
+@mixin font-size($size){
+	font-size: $size;
+	font-size: calculateRem($size);
+}
+
+@mixin line-height($height){
+	line-height: $height;
+	line-height: calculateRem($height);
+}
+
+
+//	Background picker, size, color-gradient, opacity and so on
+
+$image-path: '../image' !default;
+$fallback-extension: 'png' !default;
+$retina-suffix: '@2x';
+@mixin background-image-svg($name, $size:false){
+    background-image: url(#{$image-path}/#{$name}.svg);
+    @if($size){
+        background-size: $size;
+    }
+    .no-svg &{
+        background-image: url(#{$image-path}/#{$name}.#{$fallback-extension});
+        @media only screen and (-moz-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
+          background-image: url(#{$image-path}/#{$name}#{$retina-suffix}.#{$fallback-extension});
+        }
+    }
+}
+
+@mixin image-2x($name, $width, $height) {
+  @media (min--moz-device-pixel-ratio: 1.3),
+         (-o-min-device-pixel-ratio: 2.6/2),
+         (-webkit-min-device-pixel-ratio: 1.3),
+         (min-device-pixel-ratio: 1.3),
+         (min-resolution: 1.3dppx) {
+	/* on retina, use image that's scaled by 2 */
+	background-image: url(#{$name}.#{$fallback-extension});
+	background-size: $width $height;
+	}
+}
+
+@mixin background-image($name, $width, $height, $repeat: no-repeat, $size: 100% 100%, $position: 50% 50%){
+	background-image: url(#{$name}.#{$fallback-extension});
+	background-repeat: $repeat;
+	background-size: $size;
+	background-position: $position;
+	width: $width;
+	height: $height;
+}
+
+@mixin background-gradient($direction, $start-col, $end-col, $shape: linear){
+	background: $start-col;
+	background: #{$shape}-gradient($direction, $start-col, $end-col);
+}
+
+@mixin opacity($opacity) {
+    opacity: $opacity;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=#{$opacity * 100})";
+}
+
+
+//	Some little icons
+
+@mixin triangle($size, $color: #000, $direction: top){
+	width: 0;
+	height: 0;
+	@if $direction == top {
+		border-left: $size solid transparent;
+		border-right: $size solid transparent;
+		border-bottom: $size solid $color;
+	}@else if $direction == down {
+		border-left: $size solid transparent;
+		border-right: $size solid transparent;
+		border-top: $size solid $color;
+	}@else if $direction == right {
+		border-top: $size solid transparent;
+		border-bottom: $size solid transparent;
+		border-left: $size solid $color;
+	}@else if $direction == left {
+		border-top: $size solid transparent;
+		border-bottom: $size solid transparent;
+		border-right: $size solid $color;
+	}
+}
+
+//	Some effects only for chrome
+
+
+@mixin font-linear-gradient($strat-col, $end-col, $deg: 0deg){
+	background-image: linear-gradient(0deg, $strat-col, $end-col);
+	-webkit-background-clip: text; 
+	-webkit-text-fill-color: transparent; 
+}
+
+@mixin font-hollow-out($font-size: 1px, $color: #fff){
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke: $font-size $color;
+}
+
+//	Some fixed styles
+
+%clearfix{
+	*zoom: 1;
+	&:before, &:after{
+		content: "";
+		display: table;
+	}
+	&:after{
+		clear: both;
+	}
+}
+
+%visuallyhidden{
+	margin: -1px;
+	padding: 0;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	clip: rect(0, 0, 0, 0);
+	position: absolute;
+}
+
+%text-truncate{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}

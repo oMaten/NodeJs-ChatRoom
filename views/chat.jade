@@ -1,0 +1,17 @@
+block chat
+	div.chat-main
+		div.chat
+			div.chat-block
+				ul
+			div.chat-message
+				form(class="message-form")
+					textarea(id="message-content")
+					div.tool
+						button(type="submit")
+							i.fa.fa-commenting
+		div.user-list
+			div.user-me
+				img(src="face.png")
+				p.
+					#{username}
+			ul.list

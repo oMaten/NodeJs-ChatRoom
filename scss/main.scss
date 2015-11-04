@@ -1,0 +1,144 @@
+@import 'mixin.scss';
+@import 'chat.scss';
+
+%transition-login{
+	transition: all .5s cubic-bezier(.6,0,.4,1);
+}
+%inputStyle-login{
+	background: #fff;
+	border: none;
+	border-radius: 8px;
+	font-size: 27px;
+	height: 72px;
+	width: 99.5%;
+	margin-bottom: 10px;
+	@include opacity(1);
+	text-indent: 20px;
+	transition: all .3s ease-in-out;
+}
+
+*{
+	margin: 0;
+	padding: 0;
+	font-size: 16px;
+	line-height: 1.7;
+	li{
+		list-style: none;
+	}
+	.error-message{
+		color: #ff6666;
+	}
+}
+html,body{
+	width: 100%;
+	height: 100%;
+}
+body{
+	@include background-image(bg, 100%, 100%);
+	@include image-2x(bg, 100%, 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.form-wrapper{
+	width: 450px;
+	height: 370px;
+	.login-wrapper{
+		@extend %transition-login;
+		overflow: hidden;
+		.arrow-up{
+			@extend %transition-login;
+			@include triangle(10px,#fff);
+			position: relative;
+			left: 32px;
+		}
+		.username{
+			@extend %inputStyle-login;
+		}
+		.password{
+			@extend %inputStyle-login;
+		}
+		.repassword{
+			@extend %inputStyle-login;
+		}
+	}
+	input[type="radio"]{
+		display: none;
+		&:checked + label{
+			@include opacity(1);
+		}
+	}
+	label{
+		cursor: pointer;
+		display: inline-block;
+		font-size: 22px;
+		font-weight: 800;
+		text-transform: uppercase;
+		letter-spacing: 12px;
+		text-align: center;
+		@extend %transition-login;
+		@include opacity(.5);
+		color: #fff;
+		padding: 0 0 10px;
+		margin: 0 17px;
+		&:hover{
+			@extend %transition-login;
+			@include opacity(1);
+		}
+		&[for="signin"]{
+			
+		}
+	}
+	button{
+		background: #079BCF;
+		border: none;
+		border-radius: 8px;
+		color: #fff;
+		cursor: pointer;
+		font-size: 27px;
+		height: 72px;
+		width: 100%;
+		margin-bottom: 10px;
+		overflow: hidden;
+		position: relative;
+		top: -4px;
+		@extend %transition-login;
+		.submit{
+			display: inline-block;
+			width: auto;
+			line-height: 72px;
+			transform: translate3d(0,0,0);
+			@extend %transition-login;
+		}
+		&:hover{
+			background: #007BA5;
+		}
+	}
+	#signin{
+		&:checked ~ .login-wrapper{
+			height: 178px;
+			.arrow-up{
+				left: 32px;
+			}
+		}
+		&:checked ~ button{
+			.submit{
+				transform: translate3d(0,0,0);
+			}
+		}
+	}
+	#signup{
+		&:checked ~ .login-wrapper{
+			height: 263px;
+			.arrow-up{
+				left: 137px;
+			}
+		}
+		&:checked ~ button{
+			.submit{
+				transform: translate3d(0,-72px,0);
+			}	
+		}
+	}
+}

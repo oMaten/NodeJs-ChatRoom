@@ -1,0 +1,168 @@
+$green: #86BB71;
+$blue: #94C2ED;
+$orange: #E38968; 
+$gray: #92959E;
+
+.chat-main{
+	display: flex;
+	flex-flow: row nowrap;
+	width: 750px;
+	height: 630px;
+	max-height: 630px;
+	border-radius: 5px;
+	box-shadow: 0 0 5px #888888;
+	overflow: hidden;
+	color: #F0F0F0;
+	.chat{
+		flex: 0 0 510px;
+		background: #F2F5F8;
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: stretch;
+	}
+	.user-list{
+		flex: 0 0 240px;
+		background: #444753;
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: stretch;
+		overflow-y: scroll;
+	}
+}
+.user-list{
+	.user-me{
+		flex: 0 0 84px;
+		display: flex;
+		flex-flow: row nowrap;
+		align-items: center;
+		justify-content: space-around;
+		padding: 10px;
+		border-bottom: 1px solid rgba(194,194,194,.15);
+		> img{
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+		}
+	}
+	.list{
+		flex: 0 0 auto;
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: stretch;
+		> li{
+			flex: 0 0 32px;
+			display: flex;
+			flex-flow: row nowrap;
+			align-items: center;
+			padding: 10px;
+			> p{
+				margin-left: 20px;
+			}
+			> img{
+				width: 30px;
+				height: 30px;
+				border-radius: 50%;
+			}
+		}
+	}
+}
+.chat{
+	.chat-block{
+		flex: 0 1 450px;
+		padding: 30px 30px 20px;
+		display: flex;
+		flex-flow: column nowrap;
+		align-items: stretch;
+		overflow-y: scroll;
+		border-bottom: 1px solid rgba(52,58,82,.5);
+		> ul{
+			flex: 1 0 auto;
+			display: flex;
+			flex-flow: column nowrap;
+			
+			> li{
+				flex: 0 0 auto;
+				margin: 10px 0;
+				display: flex;
+				flex-flow: column nowrap;
+				> div{
+					max-width: 300px;
+					height: auto;
+					padding: 10px 15px;
+					margin-top: 15px;
+					text-align: justify;
+					border-radius: 5px;
+					position: relative;
+				}
+				> span{
+					color: #505050;
+					> div{
+						display: inline-block;
+					}
+					.chat-each--date{
+						margin: 0 10px;
+						color: #D2CBD4;
+					}
+				}
+			}
+			.my-message{
+				align-self: flex-start;
+				align-items: flex-start;
+				> div{
+					background: $green;
+					&:before{
+						@include triangle(10px, $green);
+						content: '';
+						position: absolute;
+						top: -8px;
+						left: 10px;
+					}
+				}
+			}
+			.other-message{
+				align-self: flex-end;
+				align-items: flex-end;
+				> div{
+					background: $blue;
+					&:before{
+						@include triangle(10px, $blue);
+						content: '';
+						position: absolute;
+						top: -8px;
+						right: 10px;
+					}
+				}
+			}
+		}
+	}
+	.chat-message{
+		flex: 1 0 140px;
+		padding: 10px 20px;
+		.message-form{
+			width: 100%;
+			display: flex;
+			flex-flow: column nowrap;
+			align-items: stretch;
+			> textarea{
+				flex: 0 0 100px;
+				border: none;
+				resize: none;
+				background: none;
+				outline: none;
+			}
+			.tool{
+				flex: 0 0 30px;
+				margin: 5px 0;
+				display: flex;
+				flex-flow: row nowrap;
+				align-items: center;
+				> button{
+					cursor: pointer;
+					border: none;
+					background: none;
+					outline: none;
+				}
+			}
+		}
+	}
+}

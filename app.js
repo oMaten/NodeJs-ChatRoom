@@ -27,6 +27,7 @@ mongoose.connect('mongodb://localhost/chat', function(error){
 
 io.sockets.on('connection', function(socket){
 	
+	User.signin({ 'username': 'murolq', 'password': '112299' });
 
 	socket.on('signup', function(data, callback){
 		if(data.password && data.repassword && data.username){

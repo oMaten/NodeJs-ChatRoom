@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
 	bcrypt = require('bcrypt'),
+	Promise = require('bluebird'),
 	SALT_WORK_FACTOR = 10;
 
 var userSchema = mongoose.Schema({
@@ -7,7 +8,6 @@ var userSchema = mongoose.Schema({
 	password: { type: String, require: true },
 	created: { type: Date, default: Date.now }
 });
-
 
 userSchema.statics.tryToSignin = function(data, callback){
 
@@ -31,6 +31,38 @@ userSchema.statics.tryToSignin = function(data, callback){
 			console.log('user is not existed');
 		}
 	});
+
+};
+
+userSchema.statics.signin = function(data){
+	var _this = this;
+	this.findUser(data)
+		.spread(function(data, user){
+			_this.passwordCompare(data, user);
+		});
+	
+};
+
+userSchema.statics.findUser = function(data){
+	return this.findOneAsync({ username: data.username })
+		.then(function(user){
+			return [ data, user ];
+		})
+		.error(function(error){
+			console.error(error.message);
+		});
+};
+
+userSchema.statics.passwordCompare = function(data, user){
+	return bcrypt.compareAsync(data.password, user.password)
+		.then(function(res){
+			if(res){
+				console.log('success!');
+			}
+		})
+		.error(function(error){
+			console.error(error.message);
+		});
 };
 
 userSchema.statics.getAuthenticated = function(data, callback){
@@ -61,7 +93,9 @@ userSchema.statics.getAuthenticated = function(data, callback){
 
 };
 
-
 var User = mongoose.model('User', userSchema);
+Promise.promisifyAll(User);
+Promise.promisifyAll(User.prototype);
+Promise.promisifyAll(bcrypt);
 
 module.exports = User;

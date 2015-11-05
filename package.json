@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "bcrypt": "^0.8.5",
+    "bluebird": "^3.0.5",
     "body-parser": "^1.14.1",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^0.8.2",

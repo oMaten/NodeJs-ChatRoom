@@ -4,7 +4,6 @@ $(function($){
 	function afterAuth(data){
 		if(data){
 			$('body').html(data);
-
 			$('.message-form').on("submit", function(event){
 				event.preventDefault();
 				socket.emit("send message", $('#message-content').val(), function(data){
@@ -17,7 +16,6 @@ $(function($){
 				});
 				$('#message-content').val('');
 			});
-
 		}else{
 			alert('error');
 		}
@@ -28,49 +26,47 @@ $(function($){
 		$('.chat-block').scrollTop(h);
 	}
 
-	$('.signin-form').on("submit", function(event){
-		event.preventDefault();
-		var userInfo = {
-			username: $('.username').val(),
-			password: $('.password').val()
-		};
-		socket.emit("signin", userInfo, afterAuth);
-
-	});
-
-	$('#signin').on('click', function(){
+	function formReset(remove, add){
 		$('.signup-form').off("submit");
 		$('.signin-form').off("submit");
-		$(this).parents('form').removeClass('signup-form').addClass('signin-form');
+		$('.form-wrapper').removeClass(remove).addClass(add);
+	}
 
-		$('.signin-form').on("submit", function(event){
-			event.preventDefault();
-			var userInfo = {
-				username: $('.username').val(),
-				password: $('.password').val()
-			};
-			socket.emit("signin", userInfo, afterAuth);
-		});
+	function formSubmit(event){
+		event.preventDefault();
+		if(event.target.className.indexOf(event.data.formName)!= -1){
+			var userInfo = {};
+			switch(event.data.formName){
+				case 'signin':
+					userInfo = {
+						username: $('.username').val(),
+						password: $('.password').val()
+					};
+					break;
+				case 'signup':
+					userInfo = {
+						username: $('.username').val(),
+						password: $('.password').val(),
+						repassword: $('.repassword').val()
+					};
+					break;
+			}
+			socket.emit(event.data.formName, userInfo, afterAuth);
+		}
+	}
+
+	$('.signin-form').on("submit", {'formName': 'signin'}, formSubmit);
+
+	$('#signin').on('click', function(){
+		formReset('signup-form', 'signin-form');
+		$('.signin-form').on("submit", {'formName': 'signin'}, formSubmit);
 	});
 
 	$('#signup').on('click', function(){
-		$('.signup-form').off("submit");
-		$('.signin-form').off("submit");
-		$(this).parents('form').removeClass('signin-form').addClass('signup-form');
-
-		$('.signup-form').on("submit", function(event){
-			event.preventDefault();
-			var userInfo = {
-				username: $('.username').val(),
-				password: $('.password').val(),
-				repassword: $('.repassword').val()
-			};
-
-			socket.emit("signup", userInfo, afterAuth);
-		});
+		formReset('signin-form', 'signup-form');
+		$('.signup-form').on("submit", {'formName': 'signup'}, formSubmit);
 	});
 
-	
 	socket.on("new message", function(data){
 		$('.chat-block > ul').append(data);
 		scrollBottom();

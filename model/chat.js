@@ -19,11 +19,9 @@ chatSchema.statics.findNewMessage = function(count){
 };
 
 chatSchema.statics.sendMessage = function(data){
-
 	var newMessage = new Chat({
 		username: data.username,
 		message: data.message,
-		created: { type: Date, default: Date.now }
 	});
 
 	return newMessage.saveAsync()

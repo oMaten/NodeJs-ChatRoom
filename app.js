@@ -128,7 +128,12 @@ io.sockets.on('connection', function(socket){
 				callback(false);
 			}
 
-			Chat.sendMessage(message)
+			var msg = {
+				username: socket.user.username,
+				message: message
+			};
+
+			Chat.sendMessage(msg)
 				.then(function(data){
 					var date = moment(data.created).format('YYYY-MM-DD HH:mm');
 					var template = jade.renderFile('views/message.jade', {'message': data.message, 'username': data.username, 'date': date});

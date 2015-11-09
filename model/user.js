@@ -102,8 +102,6 @@ userSchema.statics.passwordSalt = function(data){
 		});
 };
 
-
-
 var User = mongoose.model('User', userSchema);
 Promise.promisifyAll(User);
 Promise.promisifyAll(User.prototype);

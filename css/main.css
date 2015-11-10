@@ -20,7 +20,7 @@
     display: flex;
     flex-flow: column nowrap;
     align-items: stretch;
-    overflow-y: scroll; }
+    overflow-y: auto; }
 
 .user-list .user-me {
   flex: 0 0 84px;
@@ -59,7 +59,7 @@
   display: flex;
   flex-flow: column nowrap;
   align-items: stretch;
-  overflow-y: scroll;
+  overflow-y: auto;
   border-bottom: 1px solid rgba(52, 58, 82, 0.5); }
   .chat .chat-block > ul {
     flex: 1 0 auto;

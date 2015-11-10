@@ -9,6 +9,12 @@ var userSchema = mongoose.Schema({
 	created: { type: Date, default: Date.now }
 });
 
+userSchema.statics.failedReason = {
+	NOT_FOUND: 0,
+	PASSWORD_INCORRECT: 1,
+	USER_HAS_EXISTED: 2,
+};
+
 userSchema.statics.signin = function(data){
 	var _this = this;
 	return this.findUser(data)
@@ -21,13 +27,10 @@ userSchema.statics.signin = function(data){
 };
 
 userSchema.statics.findUser = function(data){
+	var _this = this;
 	return this.findOneAsync({ username: data.username })
 		.then(function(user){
-			if(user){
-				return [ data, user ];
-			}else{
-				return [ data, null ];
-			}
+			return [ data, user ];
 		})
 		.error(function(error){
 			console.error(error.message);
@@ -35,17 +38,23 @@ userSchema.statics.findUser = function(data){
 };
 
 userSchema.statics.passwordCompare = function(data, user){
-	return bcrypt.compareAsync(data.password, user.password)
-		.then(function(res){
-			if(res){
-				return user;
-			}else{
-				return res;
-			}
-		})
-		.error(function(error){
-			console.error(error.message);
-		});
+	var _this = this;
+
+	if(user === null){
+		throw new Error(_this.failedReason.NOT_FOUND);
+	}else{
+		return bcrypt.compareAsync(data.password, user.password)
+			.then(function(res){
+				if(res){
+					return user;
+				}else{
+					throw new Error(_this.failedReason.PASSWORD_INCORRECT);
+				}
+			})
+			.error(function(error){
+				console.error(error.message);
+			});
+	}
 };
 
 userSchema.statics.signup = function(data){
@@ -55,15 +64,11 @@ userSchema.statics.signup = function(data){
 			if(!user){
 				return _this.passwordSalt(data);
 			}else{
-				return false;
+				throw new Error(_this.failedReason.USER_HAS_EXISTED);
 			}
 		})
 		.then(function(data){
-			if(data){
-				return _this.saveUser(data);
-			}else{
-				return data;
-			}
+			return _this.saveUser(data);
 		})
 		.error(function(error){
 			console.error(error.message);

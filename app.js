@@ -28,24 +28,22 @@ io.sockets.on('connection', function(socket){
 	socket.on('signup', function(data, callback){
 		if(data.password && data.repassword && data.username){
 			if(data.password !== data.repassword){
-				return callback(false);
+				return callback(false, 3);
 			}
 		}else{
-			return callback(false);
+			return callback(false, 4);
 		}
+
 		User.signup(data)
 			.then(function(data){
-				if(data){
-					socket.user = data;
-					users[socket.user.username] = socket;
-					var template = jade.renderFile('views/chat.jade', {'username': data.username});
-					callback(template);
-				}else{
-					return callback(data);
-				}
-			})
-			.finally(function(){
+				socket.user = data;
+				users[socket.user.username] = socket;
+				var template = jade.renderFile('views/chat.jade', {'username': data.username});
+				callback(template);
 				updateUsers();
+				loadMessages(5);
+			}, function(error){
+				callback(false, error.message);
 			})
 			.error(function(error){
 				console.error(error.message);
@@ -55,30 +53,35 @@ io.sockets.on('connection', function(socket){
 	socket.on('signin', function(data, callback){
 
 		if(!data.password || !data.username){
-			return callback(false);
+			return callback(false, 4);
 		}
 		var _template = '';
 
 		User.signin(data)
 			.then(function(user){
-				if(user){
-					socket.user = user;
-					users[socket.user.username] = socket;
-					var template = jade.renderFile('views/chat.jade', {'username': user.username});
-					callback(template);
-					updateUsers();
-				}else{
-					return callback(false);
-				}
+				socket.user = user;
+				users[socket.user.username] = socket;
+				var template = jade.renderFile('views/chat.jade', {'username': user.username});
+				callback(template);
+				updateUsers();
+				loadMessages(5);
+			}, function(error){
+				callback(false, error.message);
 			})
-			.then(function(){
-				return Chat.findNewMessage(5)
-					.then(function(docs){
-						return docs;
-					});
+			.error(function(error){
+				console.error(error.message);
+			});
+
+	});
+
+	function loadMessages(count){
+		var _template = '';
+		Chat.findNewMessage(count)
+			.then(function(docs){
+				return docs;
 			})
 			.each(function(doc, index, length){
-				date = moment(doc.created).format('YYYY-MM-DD HH:mm');
+				var date = moment(doc.created).format('YYYY-MM-DD HH:mm');
 				if(doc.username == socket.user.username){
 					_template += jade.renderFile('views/messageMe.jade', {'message': doc.message, 'username': doc.username, 'date': date});
 				}else{
@@ -92,8 +95,8 @@ io.sockets.on('connection', function(socket){
 			.error(function(error){
 				console.error(error.message);
 			});
+	}
 
-	});
 	function updateUsers(){
 		var userList = Object.keys(users);
 		var template = '';

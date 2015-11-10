@@ -1,7 +1,15 @@
 $(function($){
 	var socket = io.connect();
 
-	function afterAuth(data){
+	var errorUserInfo = {
+		0: '用户不存在',
+		1: '密码不正确',
+		2: '用户名已存在',
+		3: '二次输入密码不正确',
+		4: '信息不完整',
+	};
+
+	function afterAuth(data, errorMsg){
 		if(data){
 			$('body').html(data);
 			$('.message-form').on("submit", function(event){
@@ -17,7 +25,7 @@ $(function($){
 				$('#message-content').val('');
 			});
 		}else{
-			alert('error');
+			alert(errorUserInfo[errorMsg]);
 		}
 	}
 

@@ -26,7 +26,7 @@ $gray: #92959E;
 		display: flex;
 		flex-flow: column nowrap;
 		align-items: stretch;
-		overflow-y: scroll;
+		overflow-y: auto;
 	}
 }
 .user-list{
@@ -73,7 +73,7 @@ $gray: #92959E;
 		display: flex;
 		flex-flow: column nowrap;
 		align-items: stretch;
-		overflow-y: scroll;
+		overflow-y: auto;
 		border-bottom: 1px solid rgba(52,58,82,.5);
 		> ul{
 			flex: 1 0 auto;

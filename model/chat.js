@@ -8,13 +8,13 @@ var chatSchema = mongoose.Schema({
 });
 
 chatSchema.statics.findNewMessage = function(count){
-	
-	var query = this.find({});
-	return query.sort('-created').limit(count).exec(function(error, docs){
-		if(error){
-			throw error;
-		}
-		return docs;
+	return new Promise(function(resolve, reject){
+		Chat.find({}).sort('-created').limit(count).exec(function(error, docs){
+			if(error){
+				reject(error);
+			}
+			resolve(docs);
+		});
 	});
 };
 

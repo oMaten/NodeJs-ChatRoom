@@ -81,7 +81,8 @@ $(function($){
 	});
 
 	socket.on("whisper", function(data){
-		$('.chat').append(data.nickname + ' is whisper to you:' + data.message);
+		$('.chat-block > ul').append(data);
+		scrollBottom();
 	});
 
 	socket.on("load messages", function(data){

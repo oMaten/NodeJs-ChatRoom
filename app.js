@@ -112,30 +112,25 @@ io.sockets.on('connection', function(socket){
 			message = message.substr(2);
 			if(message.indexOf(' ') !== -1){
 				var name = message.substring(0, message.indexOf(' '));
-				var whispermessage = message.substring(message.indexOf(' ')+1);
+				var whisper = message.substring(message.indexOf(' ')+1);
 				if(name in users){
-					users[name].emit('whisper', {
-						message: whispermessage,
-						nickname: socket.nickname
-					});
-					console.log('message is' + message);
+					var date = moment().format('YYYY-MM-DD HH:mm');
+					var template = jade.renderFile('views/message.jade', {'message': whisper, 'username': socket.user.username, 'date': date, 'whisper': true});
+					var _template = jade.renderFile('views/messageMe.jade', {'message': whisper, 'username': name, 'date': date, 'whisper': true});
+					users[name].emit('whisper', template);
+					callback(_template);
 				}
-			}
-			else{
+			}else{
 				callback(false);
 			}
-		}
-		else{
-
+		}else{
 			if(!socket.user || !message){
 				callback(false);
 			}
-
 			var msg = {
 				username: socket.user.username,
 				message: message
 			};
-
 			Chat.sendMessage(msg)
 				.then(function(data){
 					var date = moment(data.created).format('YYYY-MM-DD HH:mm');
@@ -159,10 +154,8 @@ io.sockets.on('connection', function(socket){
 	});
 });
 
-
 app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
-
 
 app.use(
 	sassMiddleware({
@@ -173,7 +166,6 @@ app.use(
 	})
 );
 
-
 app.use(express.static('js'));
 app.use(express.static('css'));
 app.use(express.static('image'));
@@ -183,7 +175,5 @@ app.get('/', function(req, res){
 	res.render('index');
 	res.end();
 });
-
-
 
 console.log('Server is running now');

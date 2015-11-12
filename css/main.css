@@ -19,8 +19,7 @@
     background: #444753;
     display: flex;
     flex-flow: column nowrap;
-    align-items: stretch;
-    overflow-y: auto; }
+    align-items: stretch; }
 
 .user-list .user-me {
   flex: 0 0 84px;
@@ -36,10 +35,14 @@
     border-radius: 50%; }
 
 .user-list .list {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   display: flex;
   flex-flow: column nowrap;
-  align-items: stretch; }
+  align-items: stretch;
+  overflow-y: auto; }
+  .user-list .list::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px; }
   .user-list .list > li {
     flex: 0 0 32px;
     display: flex;
@@ -61,6 +64,9 @@
   align-items: stretch;
   overflow-y: auto;
   border-bottom: 1px solid rgba(52, 58, 82, 0.5); }
+  .chat .chat-block::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px; }
   .chat .chat-block > ul {
     flex: 1 0 auto;
     display: flex;
@@ -74,7 +80,7 @@
         max-width: 300px;
         height: auto;
         padding: 10px 15px;
-        margin-top: 15px;
+        margin-top: 5px;
         text-align: justify;
         border-radius: 5px;
         position: relative; }
@@ -100,6 +106,14 @@
           position: absolute;
           top: -8px;
           left: 10px; }
+      .chat .chat-block > ul .my-message .whisper {
+        background: #E38968; }
+        .chat .chat-block > ul .my-message .whisper:before {
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid #E38968; }
     .chat .chat-block > ul .other-message {
       align-self: flex-end;
       align-items: flex-end; }
@@ -115,6 +129,14 @@
           position: absolute;
           top: -8px;
           right: 10px; }
+      .chat .chat-block > ul .other-message .whisper {
+        background: #E38968; }
+        .chat .chat-block > ul .other-message .whisper:before {
+          width: 0;
+          height: 0;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          border-bottom: 10px solid #E38968; }
 
 .chat .chat-message {
   flex: 1 0 140px;
@@ -157,6 +179,9 @@
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
   text-indent: 20px;
   transition: all 0.3s ease-in-out; }
+
+::-webkit-scrollbar {
+  width: 4px; }
 
 * {
   margin: 0;

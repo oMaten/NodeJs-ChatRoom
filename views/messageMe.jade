@@ -1,8 +1,17 @@
 li.chat-each.my-message
-	span
-		div.chat-each--name.
-			#{username}
-		div.chat-each--date.
-			#{date}
-	div.
-		#{message}
+	if whisper
+		span
+			div.chat-each--name.
+				你悄悄对 #{username} 说
+			div.chat-each--date.
+				#{date}
+		div.whisper.
+			#{message}
+	else
+		span
+			div.chat-each--name.
+				#{username}
+			div.chat-each--date.
+				#{date}
+		div.
+			#{message}

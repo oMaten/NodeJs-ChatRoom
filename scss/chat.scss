@@ -26,7 +26,6 @@ $gray: #92959E;
 		display: flex;
 		flex-flow: column nowrap;
 		align-items: stretch;
-		overflow-y: auto;
 	}
 }
 .user-list{
@@ -45,10 +44,15 @@ $gray: #92959E;
 		}
 	}
 	.list{
-		flex: 0 0 auto;
+		flex: 0 1 auto;
 		display: flex;
 		flex-flow: column nowrap;
 		align-items: stretch;
+		overflow-y: auto;
+		&::-webkit-scrollbar-thumb{
+			background-color: rgba(255,255,255,0.5);
+			border-radius: 5px;
+		}
 		> li{
 			flex: 0 0 32px;
 			display: flex;
@@ -75,11 +79,14 @@ $gray: #92959E;
 		align-items: stretch;
 		overflow-y: auto;
 		border-bottom: 1px solid rgba(52,58,82,.5);
+		&::-webkit-scrollbar-thumb{
+			background-color: rgba(0,0,0,0.5);
+			border-radius: 5px;
+		}
 		> ul{
 			flex: 1 0 auto;
 			display: flex;
 			flex-flow: column nowrap;
-			
 			> li{
 				flex: 0 0 auto;
 				margin: 10px 0;
@@ -89,7 +96,7 @@ $gray: #92959E;
 					max-width: 300px;
 					height: auto;
 					padding: 10px 15px;
-					margin-top: 15px;
+					margin-top: 5px;
 					text-align: justify;
 					border-radius: 5px;
 					position: relative;
@@ -118,6 +125,12 @@ $gray: #92959E;
 						left: 10px;
 					}
 				}
+				.whisper{
+					background: $orange;
+					&:before{
+						@include triangle(10px, $orange);
+					}
+				}
 			}
 			.other-message{
 				align-self: flex-end;
@@ -130,6 +143,12 @@ $gray: #92959E;
 						position: absolute;
 						top: -8px;
 						right: 10px;
+					}
+				}
+				.whisper{
+					background: $orange;
+					&:before{
+						@include triangle(10px, $orange);
 					}
 				}
 			}
